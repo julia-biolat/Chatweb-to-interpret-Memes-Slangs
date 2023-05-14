@@ -20,7 +20,7 @@ def es(word):
     # Elasticsearch 인스턴스에 연결
     es = Elasticsearch(
         cloud_id="LingoLink:dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvOjQ0MyRmNWZhZTdmZDQzMDY0ODljOGE2NDJmZjE1NGM0NWE5MCQ0Zjg0NTYwN2QxMjg0ZjVjOTU5Yzc2ZTRmNGQ4Y2NmMA==",
-        basic_auth=("elastic", "Gimsh137!!")
+        basic_auth=("elastic", "******")
     )
 
     # 인덱스에 쿼리를 실행
