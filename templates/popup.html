@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="popup">
+  <h2>{{ word }}</h2>
+  <p>{{ description }}</p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+  const popup = document.querySelector('.popup');
+  popup.addEventListener('click', () => {
+    popup.style.display = 'none';
+  });
+</script>
+{% endblock %}

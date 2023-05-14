@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.text{
+  margin-bottom: 5px;
+}
+
+.tooltip .tooltiptext {
+  
+    visibility: visible;
+    opacity: 1;
+    width: 200px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    white-space: normal;
+    position: absolute;
+    z-index: 1000;
+    bottom: -20px;
+    left: 50%;
+    margin-left: -60px;
+    height: auto;
+
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext .more {
+    display: none;  /* "더보기" 텍스트를 기본적으로 숨김 */
+}
+
+</style>
+
+<div class="chat-container">
+  <h2>Chat Room: {{code}}</h2>
+  <div class="messages" class="message" class="chat" id="messages"></div>
+  <div class="inputs">
+    <input
+      type="text"
+      rows="3"
+      placeholder="Message"
+      name="message"
+      id="message"
+    />
+    <button type="button" name="send" id="send-btn" onClick="sendMessage()">
+      Send
+    </button>
+  </div>
+</div>
+<script type="text/javascript">
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const messageInput = document.getElementById("message");
+  
+    messageInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault(); // Prevent line break in the text input
+        sendMessage();
+      }
+    });
+  });
+  var socketio = io();
+  var meme = {"폼 미쳤다":"무야호는 2021년 3월부터 대한민국에서 유행하기 시작한 인터넷 밈입니다. MBC 무한도전의 2011년 방영분에서 연출된 미국 알래스카 교민 할아버지의 함성에서 유래하였다. 방송 자체의 코믹", "중꺽마":"B", "자 드가자":"C", "포브스 선정":"D", "완전 MZ인데요?":"E"  };
+  const messages = document.getElementById("messages");
+
+  const createMessage = (name, msg) => {
+    for (const word in meme) {
+        const shortDesc = meme[word].substr(0, 50);  // 첫 50자만 보여줌
+        const longDesc = meme[word].substr(50);  // 나머지 텍스트
+        const regex = new RegExp(word, 'g');
+        msg = msg.replace(regex, `<span class="tooltip"><b>${word}</b><span class="tooltiptext">${shortDesc}<span class="more">${longDesc}</span><button onclick="this.previousSibling.style.display='inline'; this.style.display='none'; this.parentNode.style.height = this.parentNode.scrollHeight + 'px';">더보기</button></span></span>`);
+    }
+    const content = `
+    <div class="text">
+        <span>
+            <strong>${name}</strong>: ${msg}
+        </span>
+        <span class="muted">
+            ${new Date().toLocaleString()}
+        </span>
+    </div>
+    `;
+    messages.innerHTML += content;
+  };
+
+  socketio.on("message", (data) => {
+    createMessage(data.name, data.message);
+  });
+
+  const sendMessage = () => {
+    const message = document.getElementById("message");
+    if (message.value == "") return;
+    socketio.emit("message", { data: message.value });
+    message.value = "";
+  };
+</script>
+{% for msg in messages %}
+<script type="text/javascript">
+  createMessage("{{msg.name}}", "{{msg.message}}");
+</script>
+
+{% endfor %}
+{% endblock %}

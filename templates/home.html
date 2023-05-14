@@ -1,0 +1,35 @@
+{% extends 'base.html' %} {% block content %}
+<form method="post" class="buttons">
+  <body bgcolor="black");></body>
+  <h3><span style="color: white"><p style="font-size: 100px">LingoLink</p></span></h3>
+  <div>
+    <input
+      class="button-83"
+      type="text"
+      placeholder="이름을 쓰세요"
+      name="name"
+      value="{{name}}"
+    />
+
+    
+  </div>
+  <div class="join">
+    <input 
+    class="button-84"
+    type="text" 
+    placeholder="룸 코드" 
+    name="code" 
+    value="{{code}}" />
+    <button type="submit" class="button-82" name="join" role="button">join </button>
+  </div>
+
+
+  <button type="submit" class="auth" name="create" class="create-btn" role="button" span style="color: black">방 생성</button></span>
+  {% if error %}
+  <ul>
+    <li>{{error}}</li>
+  </ul>
+  {% endif %}
+</form>
+{% endblock %}
+
